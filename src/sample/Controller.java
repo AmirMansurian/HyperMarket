@@ -1,15 +1,21 @@
 package sample;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.collections.ObservableList;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+import javax.security.auth.callback.Callback;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 public class Controller {
@@ -30,7 +36,7 @@ public class Controller {
     private Button button;
 
     @FXML
-    private TableView table;
+    private TableView <Person> table;
 
     Connection connection = null;
     PreparedStatement statement = null;
@@ -56,31 +62,10 @@ public class Controller {
         //statement.setString(1, name);
         resultSet = statement.executeQuery();
 
-        TableColumn ID = new TableColumn("Customer ID");
-        ID.setCellValueFactory(new PropertyValueFactory<>("ID"));
-
-        TableColumn FName = new TableColumn("First Name");
-        TableColumn LName = new TableColumn("Last Name");
-        TableColumn Gender = new TableColumn("Gender");
-        TableColumn BirthDay = new TableColumn("Birth Day");
-        TableColumn PhoneNumber = new TableColumn("Phone Number");
-        TableColumn Dept = new TableColumn("Dept");
-
-
-        table.getColumns().addAll(ID, FName, LName, Gender, BirthDay, PhoneNumber, Dept);
+        ObservableList <Person> data = FXCollections.observableArrayList();
 
         while(resultSet.next())
         {
-
-//             ID = new TableColumn(resultSet.getString("CustomerId"));
-//             FName = new TableColumn(resultSet.getString("FirstName"));
-//             LName = new TableColumn(resultSet.getString("LastName"));
-//             Gender = new TableColumn(resultSet.getString("Gender"));
-//             BirthDay = new TableColumn(resultSet.getString("BirthDay"));
-//             PhoneNumber = new TableColumn(resultSet.getString("PhoneNumber"));
-//             Dept = new TableColumn(resultSet.getString("Debt"));
-
-
             List<String> list = new ArrayList<String>();
             list.add(resultSet.getString("CustomerId"));
             list.add(resultSet.getString("FirstName"));
@@ -90,15 +75,37 @@ public class Controller {
             list.add(resultSet.getString("PhoneNumber"));
             list.add(resultSet.getString("Debt"));
 
-           // System.out.println(list);
-            ObservableList<String> observlist = FXCollections.observableList(list);
-
-            System.out.println(observlist);
-
-             table.setItems(observlist);
+            data.add(new Person(list.get(0), list.get(1), list.get(2), list.get(3), list.get(4), list.get(5), list.get(6)));
         }
 
+        System.out.println(data);
 
+        TableColumn  ID = new TableColumn("Customer ID");
+        ID.setCellValueFactory(new PropertyValueFactory<>("ID"));
+
+        TableColumn FName = new TableColumn("First Name");
+        FName.setCellValueFactory(new PropertyValueFactory<>("FirstName"));
+
+        TableColumn LName = new TableColumn("Last Name");
+        LName.setCellValueFactory(new PropertyValueFactory<>("LastName"));
+
+        TableColumn Gender = new TableColumn("Gender");
+        Gender.setCellValueFactory(new PropertyValueFactory<>("Gender"));
+
+        TableColumn BirthDay = new TableColumn("Birth Day");
+        BirthDay.setCellValueFactory(new PropertyValueFactory<>("BirthDay"));
+
+        TableColumn PhoneNumber = new TableColumn("Phone Number");
+        PhoneNumber.setCellValueFactory(new PropertyValueFactory<>("PhoneNumber"));
+
+        TableColumn Dept = new TableColumn("Dept");
+        Dept.setCellValueFactory(new PropertyValueFactory<>("Debt"));
+
+
+
+        table.setItems(data);
+        table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        table.getColumns().addAll(ID, FName, LName, Gender, BirthDay, PhoneNumber, Dept);
 
         }
     }
