@@ -66,6 +66,55 @@ public class Controller {
     @FXML
     private TableView <Person> Table;
 
+    @FXML
+    private TextField PIDText;
+
+    @FXML
+    private TextField PNameText;
+
+    @FXML
+    private TextField BarcodeText;
+
+    @FXML
+    private TextField BrandText;
+
+    @FXML
+    private TextField SupplierText;
+
+    @FXML
+    private TextField ClassTypeText;
+
+    @FXML
+    private TextField UnitText;
+
+    @FXML
+    private Label PIDLabel;
+
+    @FXML
+    private Label PNameLabel;
+
+    @FXML
+    private Label BarcoedLabel;
+
+    @FXML
+    private Label BrandLabel;
+
+    @FXML
+    private Label SupplierLabel;
+
+    @FXML
+    private Label ClassTypeLabel;
+
+    @FXML
+    private Label UnitLabel;
+
+    @FXML
+    private Button PSearchButton;
+
+    @FXML
+    private TableView <Product> ProductTable;
+
+
     Connection connection = null;
     PreparedStatement statement = null;
     ResultSet resultSet = null;
@@ -98,6 +147,114 @@ public class Controller {
         TypeMenu.getItems().addAll(item1, item2, item3);
     }
 
+
+    @FXML
+    private void handleProductSearch(ActionEvent event) throws SQLException {
+        List <String> Args = new ArrayList<String>();
+        Args.add(PIDText.getText());
+        Args.add(PNameText.getText());
+        Args.add(BarcodeText.getText());
+        Args.add(BrandText.getText());
+        Args.add(ClassTypeText.getText());
+        Args.add(UnitText.getText());
+        Args.add(SupplierText.getText());
+
+        String query = "select * from Production.Product as P, Production.ProductDetail as D, Production.ProductionSubClass as S, Production.Inventory as I, Person.Supplier as SU    where  P.ProductId = I.ProductId and P.productId = D.ProductId and P.SubClassId = S.ProductionSubClassId and D.SupplierId = SU.SupplierId";
+
+
+        for (int i = 0; i < Args.size(); i++) {
+            if (!Args.get(i).isEmpty()) {
+                if (i == 0)
+                    query += " and P.ProductId = ? ";
+                 else if (i == 1)
+                    query += " and ProductName = ? ";
+                 else if (i == 2)
+                    query += " and Barcode = ? ";
+                 else if (i == 3)
+                    query += " and Brand = ? ";
+                else if (i == 4)
+                    query += " and TypeName = ? ";
+                else if (i == 5)
+                    query += " and MeasureUnit = ? ";
+                else if (i == 6)
+                    query += " and LastName = ? ";
+            }
+        }
+
+        statement = connection.prepareStatement(query);
+
+        int j = 0;
+        for (int i = 0; i < Args.size(); i++) {
+            if (!Args.get(i).isEmpty())
+                statement.setString(++j, Args.get(i));
+        }
+        System.out.println(query);
+
+
+        resultSet = statement.executeQuery();
+
+
+        if (resultSet.next() != false) {
+
+            resultSet = statement.executeQuery();
+            ObservableList<Product> data = FXCollections.observableArrayList();
+            while (resultSet.next()) {
+                List<String> list = new ArrayList<String>();
+                list.add(resultSet.getString("ProductId"));
+                list.add(resultSet.getString("ProductName"));
+                list.add(resultSet.getString("Barcode"));
+                list.add(resultSet.getString("Brand"));
+                list.add(resultSet.getString("MeasureUnit"));
+                list.add(resultSet.getString("ProductFee"));
+                list.add(resultSet.getString("Inventory"));
+                list.add(resultSet.getString("LastName"));
+                list.add(resultSet.getString("BuyFee"));
+                list.add(resultSet.getString("Discount"));
+                list.add(resultSet.getString("TypeName"));
+
+                data.add(new Product(list.get(0), list.get(1), list.get(2), list.get(3), list.get(4), list.get(5), list.get(6), list.get(7), list.get(8), list.get(9), list.get(10)));
+            }
+
+
+            TableColumn ProductId = new TableColumn("Product ID");
+            ProductId.setCellValueFactory(new PropertyValueFactory<>("ID"));
+
+            TableColumn FName = new TableColumn("Product Name");
+            FName.setCellValueFactory(new PropertyValueFactory<>("Name"));
+
+            TableColumn Barcode = new TableColumn("Barcode");
+            Barcode.setCellValueFactory(new PropertyValueFactory<>("Barcode"));
+
+            TableColumn Brand = new TableColumn("Brand");
+            Brand.setCellValueFactory(new PropertyValueFactory<>("Brand"));
+
+            TableColumn Unit = new TableColumn("Unit");
+            Unit.setCellValueFactory(new PropertyValueFactory<>("Unit"));
+
+            TableColumn Fee = new TableColumn("Fee");
+            Fee.setCellValueFactory(new PropertyValueFactory<>("Fee"));
+
+            TableColumn Inventory = new TableColumn("Inventory");
+            Inventory.setCellValueFactory(new PropertyValueFactory<>("Inventory"));
+
+            TableColumn Supplier = new TableColumn("Supplier");
+            Supplier.setCellValueFactory(new PropertyValueFactory<>("Supplier"));
+
+            TableColumn BuyFee = new TableColumn("BuyFee");
+            BuyFee.setCellValueFactory(new PropertyValueFactory<>("BuyFee"));
+
+            TableColumn Discount = new TableColumn("Discount");
+            Discount.setCellValueFactory(new PropertyValueFactory<>("Discount"));
+
+            TableColumn TypeName = new TableColumn("TypeName");
+            TypeName.setCellValueFactory(new PropertyValueFactory<>("TypeName"));
+
+
+            ProductTable.setItems(data);
+            ProductTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+            ProductTable.getColumns().setAll(ProductId, FName, Barcode, Brand, Unit, Fee, Inventory, Supplier, BuyFee, Discount, TypeName);
+        }
+    }
 
     @FXML
     private void handleButtonAction(ActionEvent event) throws SQLException {
@@ -417,4 +574,5 @@ public class Controller {
 
         }
     }
+
 

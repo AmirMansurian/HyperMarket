@@ -32,9 +32,27 @@
                      </children></AnchorPane>
             </content>
           </Tab>
-          <Tab text="Untitled Tab 2">
+          <Tab text="Product">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="ProductTable" layoutX="308.0" layoutY="5.0" prefHeight="542.0" prefWidth="770.0" />
+                        <TextField fx:id="PIDText" layoutX="101.0" layoutY="14.0" />
+                        <TextField fx:id="PNameText" layoutX="101.0" layoutY="54.0" />
+                        <TextField fx:id="BarcodeText" layoutX="101.0" layoutY="101.0" />
+                        <TextField fx:id="BrandText" layoutX="101.0" layoutY="151.0" />
+                        <TextField fx:id="SupplierText" layoutX="101.0" layoutY="205.0" />
+                        <Label fx:id="PIDLabel" layoutX="16.0" layoutY="18.0" text="Product ID" />
+                        <Label fx:id="PNameLabel" layoutX="13.0" layoutY="58.0" text="Name" />
+                        <Label fx:id="BarcodeLabel" layoutX="14.0" layoutY="105.0" text="Barcode" />
+                        <Label fx:id="BrandLabel" layoutX="20.0" layoutY="155.0" text="Brand" />
+                        <Label fx:id="SupplierLabel" layoutX="14.0" layoutY="209.0" text="Supplier" />
+                        <Label fx:id="ClassTypeLabel" layoutX="16.0" layoutY="259.0" text="Class Type" />
+                        <TextField fx:id="ClassTypeText" layoutX="101.0" layoutY="255.0" />
+                        <TextField fx:id="UnitText" layoutX="101.0" layoutY="306.0" />
+                        <Label fx:id="UnitLabel" layoutX="11.0" layoutY="310.0" text="Unit" />
+                        <Button fx:id="PSearchButton" layoutX="72.0" layoutY="375.0" mnemonicParsing="false" onAction="#handleProductSearch" prefHeight="35.0" prefWidth="135.0" text="Search" />
+                     </children></AnchorPane>
             </content>
           </Tab>
         </tabs>
