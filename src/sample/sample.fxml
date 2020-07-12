@@ -7,7 +7,7 @@
    <children>
       <TabPane layoutX="3.0" layoutY="2.0" prefHeight="581.0" prefWidth="1086.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
-          <Tab text="Untitled Tab 1">
+          <Tab text="Persons">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
@@ -16,13 +16,25 @@
                         <TextField fx:id="LNameText" layoutX="106.0" layoutY="76.0" />
                         <TextField fx:id="IDText" layoutX="106.0" layoutY="120.0" />
                         <TextField fx:id="NumberText" layoutX="106.0" layoutY="165.0" />
-                        <TextField fx:id="TypeText" layoutX="106.0" layoutY="209.0" />
                         <Label fx:id="LNameLabel" layoutX="15.0" layoutY="80.0" text="LastName" />
-                        <Label fx:id="IDLabel" layoutX="8.0" layoutY="124.0" text="Customer ID" />
+                        <Label fx:id="IDLabel" layoutX="35.0" layoutY="124.0" text="ID" />
                         <Label fx:id="NumberLabel" layoutX="2.0" layoutY="169.0" text="Phone number" />
-                        <Label fx:id="TypeLabel" layoutX="15.0" layoutY="213.0" text="Type" />
+                        <Label fx:id="TypeLabel" layoutX="28.0" layoutY="254.0" text="Type" />
                         <TableView fx:id="Table" layoutX="306.0" layoutY="14.0" prefHeight="526.0" prefWidth="771.0" />
-                        <Button fx:id="SearchButton" layoutX="41.0" layoutY="267.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="50.0" prefWidth="188.0" text="Search" />
+                        <Button fx:id="SearchButton" layoutX="28.0" layoutY="366.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="26.0" prefWidth="124.0" text="Search" />
+                        <MenuButton fx:id="TypeMenu" layoutX="220.0" layoutY="249.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="22.0" />
+                        <TextField fx:id="TypeText" layoutX="106.0" layoutY="250.0" prefHeight="26.0" prefWidth="114.0" promptText="Customer" />
+                        <TextField fx:id="CompText" layoutX="106.0" layoutY="209.0" />
+                        <TextField fx:id="STText" layoutX="106.0" layoutY="297.0" prefHeight="26.0" prefWidth="115.0" />
+                        <Label fx:id="CompLabel" layoutX="15.0" layoutY="213.0" text="Company" />
+                        <Label fx:id="STLabel" layoutX="14.0" layoutY="301.0" text="Staff Type" />
+                        <MenuButton fx:id="STMenu" layoutX="220.0" layoutY="297.0" mnemonicParsing="false">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="Action 1" />
+                            <MenuItem mnemonicParsing="false" text="Action 2" />
+                          </items>
+                        </MenuButton>
+                        <CheckBox fx:id="RankSort" layoutX="177.0" layoutY="370.0" mnemonicParsing="false" text="Sort By Rank" />
                      </children></AnchorPane>
             </content>
           </Tab>
