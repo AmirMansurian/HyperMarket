@@ -82,6 +82,34 @@
           </content>
 
           </Tab>
+            <Tab text="Orders">
+                <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="OrderTable" layoutX="368.0" layoutY="8.0" prefHeight="533.0" prefWidth="705.0" />
+                        <TextField fx:id="OrderText" layoutX="148.0" layoutY="60.0" />
+                        <TextField fx:id="CustomerText" layoutX="148.0" layoutY="104.0" />
+                        <TextField fx:id="CashierText" layoutX="148.0" layoutY="145.0" />
+                        <TextField fx:id="PayText" layoutX="148.0" layoutY="262.0" />
+                        <TextField fx:id="SDText" layoutX="148.0" layoutY="301.0" promptText="Format : YY-MM-DD" />
+                        <Label layoutX="31.0" layoutY="64.0" text="Order ID" />
+                        <Label layoutX="31.0" layoutY="108.0" text="Customer ID" />
+                        <Label layoutX="31.0" layoutY="149.0" text="Cashier ID" />
+                        <Label layoutX="31.0" layoutY="266.0" text="Pay Type" />
+                        <Label layoutX="31.0" layoutY="305.0" text="Start Date" />
+                        <Label layoutX="31.0" layoutY="346.0" text="End Date" />
+                        <TextField fx:id="EDText" layoutX="148.0" layoutY="342.0" promptText="Format : YY-MM-DD" />
+                        <TextField fx:id="Supplier2Text" layoutX="148.0" layoutY="181.0" />
+                        <TextField fx:id="TransfreeText" layoutX="148.0" layoutY="222.0" />
+                        <Label layoutX="31.0" layoutY="185.0" text="Supplier ID" />
+                        <Label layoutX="31.0" layoutY="226.0" text="Transfree ID" />
+                        <CheckBox fx:id="SaleCheck" layoutX="222.0" layoutY="416.0" mnemonicParsing="false" text="Sale Order" />
+                        <CheckBox fx:id="BuyCheck" layoutX="223.0" layoutY="435.0" mnemonicParsing="false" text="Buy Order" />
+                        <Button fx:id="OrderButton" layoutX="31.0" layoutY="416.0" onAction="#OrderHandler" mnemonicParsing="false" prefHeight="37.0" prefWidth="164.0" style="-fx-background-color: #011936;" text="Search" textFill="#f8f6f6" />
+                     </children></AnchorPane>
+                </content>
+
+            </Tab>
         </tabs>
       </TabPane>
    </children>

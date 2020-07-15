@@ -106,6 +106,40 @@ public class Controller {
     @FXML
     private TableView <Product> ProductReports;
 
+    @FXML
+    private TextField OrderText;
+
+    @FXML
+    private TextField CustomerText;
+
+    @FXML
+    private TextField CashierText;
+
+    @FXML
+    private TextField Supplier2Text;
+
+    @FXML
+    private TextField TransfreeText;
+
+    @FXML
+    private TextField SDText;
+
+    @FXML
+    private TextField EDText;
+
+    @FXML
+    private TextField PayText;
+
+    @FXML
+    private TableView <Order> OrderTable;
+
+    @FXML
+    private CheckBox SaleCheck;
+
+    @FXML
+    private CheckBox BuyCheck;
+
+
 
     Connection connection = null;
     PreparedStatement statement = null;
@@ -226,8 +260,256 @@ public class Controller {
             CheckBox5.setSelected(false);
         });
 
+        SaleCheck.setSelected(true);
+        Supplier2Text.setDisable(true);
+        TransfreeText.setDisable(true);
+
+        SaleCheck.setOnAction(event -> {
+            if (!SaleCheck.isSelected())
+                SaleCheck.setSelected(true);
+            else
+            {
+                BuyCheck.setSelected(false);
+                Supplier2Text.setDisable(true);
+                TransfreeText.setDisable(true);
+                CustomerText.setDisable(false);
+                CashierText.setDisable(false);
+            }
+        });
+
+        BuyCheck.setOnAction(event -> {
+            if (!BuyCheck.isSelected())
+                BuyCheck.setSelected(true);
+            else
+            {
+                SaleCheck.setSelected(false);
+                Supplier2Text.setDisable(false);
+                TransfreeText.setDisable(false);
+                CustomerText.setDisable(true);
+                CashierText.setDisable(true);
+            }
+        });
+    }
+
+    @FXML
+    private void OrderHandler (ActionEvent event) throws  SQLException {
+        if (SaleCheck.isSelected()) {
+            List<String> Args = new ArrayList<String>();
+            Args.add(OrderText.getText());
+            Args.add(CashierText.getText());
+            Args.add(CustomerText.getText());
+            Args.add(PayText.getText());
+            Args.add(SDText.getText());
+            Args.add(EDText.getText());
+
+            String query = "select  H.SaleId, H.CashierId, H.CustomerId, H.SaleStatus, H.PayType, H.Date, P.Barcode, P.ProductName, P.Brand, D.ProductQty, D.UnitPrice, H.Discount, H.FinalCost from Transactions.SaleHeader as H, Transactions.SaleDetail as D, Production.Product as P where H.SaleId = D.SaleId and P.ProductId = D.ProductId";
+
+            for (int i = 0; i < Args.size(); i++) {
+                if (!Args.get(i).isEmpty()) {
+                    if (i == 0)
+                        query += " and H.SaleId = ? ";
+                    else if (i == 1)
+                        query += " and H.CashierId = ? ";
+                    else if (i == 2)
+                        query += " and H.CustomerId = ? ";
+                    else if (i == 3)
+                        query += " and H.PayType = ? ";
+                    else if (i == 4)
+                        query += " and H.Date >= ? ";
+                    else if (i == 5)
+                        query += " and H.Date <= ? ";
+                }
+            }
+
+            statement = connection.prepareStatement(query);
+
+            int j = 0;
+            for (int i = 0; i < Args.size(); i++) {
+                if (!Args.get(i).isEmpty())
+                    statement.setString(++j, Args.get(i));
+            }
+            System.out.println(query);
 
 
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next() != false) {
+                resultSet = statement.executeQuery();
+                ObservableList<Order> data = FXCollections.observableArrayList();
+                while (resultSet.next()) {
+                    List<String> list = new ArrayList<String>();
+                    list.add(resultSet.getString("SaleId"));
+                    list.add(resultSet.getString("CashierId"));
+                    list.add(resultSet.getString("CustomerId"));
+                    list.add(resultSet.getString("SaleStatus"));
+                    list.add(resultSet.getString("PayType"));
+                    list.add(resultSet.getString("Date"));
+                    list.add(resultSet.getString("Barcode"));
+                    list.add(resultSet.getString("ProductName"));
+                    list.add(resultSet.getString("Brand"));
+                    list.add(resultSet.getString("ProductQty"));
+                    list.add(resultSet.getString("UnitPrice"));
+                    list.add(resultSet.getString("Discount"));
+                    list.add(resultSet.getString("FinalCost"));
+
+                    data.add(new Order(list.get(0), list.get(1), list.get(2), list.get(3), list.get(4), list.get(5), list.get(6), list.get(7), list.get(8), list.get(9), list.get(10), list.get(11), list.get(12)));
+                }
+
+                TableColumn ID = new TableColumn("OrderID");
+                ID.setCellValueFactory(new PropertyValueFactory<>("ID"));
+
+                TableColumn Cashier = new TableColumn("CashierID");
+                Cashier.setCellValueFactory(new PropertyValueFactory<>("Cashier"));
+
+                TableColumn CustomerID = new TableColumn("CustomerID");
+                CustomerID.setCellValueFactory(new PropertyValueFactory<>("Customer"));
+
+                TableColumn SaleStatus = new TableColumn("SaleStatus");
+                SaleStatus.setCellValueFactory(new PropertyValueFactory<>("SaleStatus"));
+
+                TableColumn PayType = new TableColumn("PayType");
+                PayType.setCellValueFactory(new PropertyValueFactory<>("PayType"));
+
+                TableColumn Date = new TableColumn("Date");
+                Date.setCellValueFactory(new PropertyValueFactory<>("Date"));
+
+                TableColumn ProductBarcode = new TableColumn("Barcode");
+                ProductBarcode.setCellValueFactory(new PropertyValueFactory<>("ProductBarcode"));
+
+                TableColumn ProductName = new TableColumn("ProductName");
+                ProductName.setCellValueFactory(new PropertyValueFactory<>("ProductName"));
+
+                TableColumn ProductBrand = new TableColumn("Brand");
+                ProductBrand.setCellValueFactory(new PropertyValueFactory<>("ProductBrand"));
+
+                TableColumn ProductQty = new TableColumn("Qty");
+                ProductQty.setCellValueFactory(new PropertyValueFactory<>("ProductQty"));
+
+                TableColumn UnitPrice = new TableColumn("UnitPrice");
+                UnitPrice.setCellValueFactory(new PropertyValueFactory<>("UnitPrice"));
+
+                TableColumn TotalDiscount = new TableColumn("TotalDiscount");
+                TotalDiscount.setCellValueFactory(new PropertyValueFactory<>("TotalDiscount"));
+
+                TableColumn FinalCost = new TableColumn("FinalCost");
+                FinalCost.setCellValueFactory(new PropertyValueFactory<>("FinalCost"));
+
+                OrderTable.setItems(data);
+                OrderTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+                OrderTable.getColumns().setAll(ID, Cashier, CustomerID, SaleStatus, PayType, Date, ProductBarcode, ProductName, ProductBrand, ProductQty, UnitPrice, TotalDiscount, FinalCost);
+            } else {
+                OrderTable.getItems().setAll();
+                OrderTable.getColumns().setAll();
+            }
+        } else if (BuyCheck.isSelected()) {
+                List<String> Args = new ArrayList<String>();
+                Args.add(OrderText.getText());
+                Args.add(Supplier2Text.getText());
+                Args.add(TransfreeText.getText());
+                Args.add(PayText.getText());
+                Args.add(SDText.getText());
+                Args.add(EDText.getText());
+
+                String query = "select  H.BuyId, H.SupplierId, H.TransfereeId, D.BuyPrice, H.PayType, H.Date, P.Barcode, P.ProductName, P.Brand, D.ProductQty, D.UnitPrice, H.Discount, H.FinalCost from Transactions.BuyHeader as H, Transactions.BuyDetail as D, Production.Product as P where H.BuyId = D.BuyId and P.ProductId = D.ProductId";
+
+                for (int i = 0; i < Args.size(); i++) {
+                    if (!Args.get(i).isEmpty()) {
+                        if (i == 0)
+                            query += " and H.BuyId = ? ";
+                        else if (i == 1)
+                            query += " and H.SupplierId = ? ";
+                        else if (i == 2)
+                            query += " and H.TransfereeId = ? ";
+                        else if (i == 3)
+                            query += " and H.PayType = ? ";
+                        else if (i == 4)
+                            query += " and H.Date >= ? ";
+                        else if (i == 5)
+                            query += " and H.Date <= ? ";
+                    }
+                }
+
+                statement = connection.prepareStatement(query);
+
+                int j = 0;
+                for (int i = 0; i < Args.size(); i++) {
+                    if (!Args.get(i).isEmpty())
+                        statement.setString(++j, Args.get(i));
+                }
+                System.out.println(query);
+
+
+                resultSet = statement.executeQuery();
+
+                if (resultSet.next() != false) {
+                    resultSet = statement.executeQuery();
+                    ObservableList<Order> data = FXCollections.observableArrayList();
+                    while (resultSet.next()) {
+                        List<String> list = new ArrayList<String>();
+                        list.add(resultSet.getString("BuyId"));
+                        list.add(resultSet.getString("SupplierId"));
+                        list.add(resultSet.getString("TransfereeId"));
+                        list.add(resultSet.getString("BuyPrice"));
+                        list.add(resultSet.getString("PayType"));
+                        list.add(resultSet.getString("Date"));
+                        list.add(resultSet.getString("Barcode"));
+                        list.add(resultSet.getString("ProductName"));
+                        list.add(resultSet.getString("Brand"));
+                        list.add(resultSet.getString("ProductQty"));
+                        list.add(resultSet.getString("UnitPrice"));
+                        list.add(resultSet.getString("Discount"));
+                        list.add(resultSet.getString("FinalCost"));
+
+                        data.add(new Order(list.get(0), list.get(1), list.get(2), list.get(3), list.get(4), list.get(5), list.get(6), list.get(7), list.get(8), list.get(9), list.get(10), list.get(11), list.get(12)));
+                    }
+
+                    TableColumn ID = new TableColumn("OrderID");
+                    ID.setCellValueFactory(new PropertyValueFactory<>("ID"));
+
+                    TableColumn Cashier = new TableColumn("SupplierID");
+                    Cashier.setCellValueFactory(new PropertyValueFactory<>("SupplierID"));
+
+                    TableColumn CustomerID = new TableColumn("CustomerID");
+                    CustomerID.setCellValueFactory(new PropertyValueFactory<>("TransfreeID"));
+
+                    TableColumn SaleStatus = new TableColumn("BuyPrice");
+                    SaleStatus.setCellValueFactory(new PropertyValueFactory<>("BuyPrice"));
+
+                    TableColumn PayType = new TableColumn("PayType");
+                    PayType.setCellValueFactory(new PropertyValueFactory<>("PayType"));
+
+                    TableColumn Date = new TableColumn("Date");
+                    Date.setCellValueFactory(new PropertyValueFactory<>("Date"));
+
+                    TableColumn ProductBarcode = new TableColumn("Barcode");
+                    ProductBarcode.setCellValueFactory(new PropertyValueFactory<>("ProductBarcode"));
+
+                    TableColumn ProductName = new TableColumn("ProductName");
+                    ProductName.setCellValueFactory(new PropertyValueFactory<>("ProductName"));
+
+                    TableColumn ProductBrand = new TableColumn("Brand");
+                    ProductBrand.setCellValueFactory(new PropertyValueFactory<>("ProductBrand"));
+
+                    TableColumn ProductQty = new TableColumn("Qty");
+                    ProductQty.setCellValueFactory(new PropertyValueFactory<>("ProductQty"));
+
+                    TableColumn UnitPrice = new TableColumn("UnitPrice");
+                    UnitPrice.setCellValueFactory(new PropertyValueFactory<>("UnitPrice"));
+
+                    TableColumn TotalDiscount = new TableColumn("TotalDiscount");
+                    TotalDiscount.setCellValueFactory(new PropertyValueFactory<>("TotalDiscount"));
+
+                    TableColumn FinalCost = new TableColumn("FinalCost");
+                    FinalCost.setCellValueFactory(new PropertyValueFactory<>("FinalCost"));
+
+                    OrderTable.setItems(data);
+                    OrderTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+                    OrderTable.getColumns().setAll(ID, Cashier, CustomerID, PayType, Date, ProductBarcode, ProductName, ProductBrand, ProductQty, UnitPrice, SaleStatus, TotalDiscount, FinalCost);
+                } else {
+                    OrderTable.getItems().setAll();
+                    OrderTable.getColumns().setAll();
+                }
+        }
     }
 
     @FXML
