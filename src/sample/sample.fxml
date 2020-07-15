@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="589.0" prefWidth="1097.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<AnchorPane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="589.0" prefWidth="1097.0" style="-fx-background-color: #82A3A1;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
       <TabPane layoutX="3.0" layoutY="2.0" prefHeight="581.0" prefWidth="1086.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -21,7 +21,7 @@
                         <Label fx:id="NumberLabel" layoutX="2.0" layoutY="169.0" text="Phone number" />
                         <Label fx:id="TypeLabel" layoutX="22.0" layoutY="216.0" text="Type" />
                         <TableView fx:id="Table" layoutX="306.0" layoutY="14.0" prefHeight="526.0" prefWidth="771.0" />
-                        <Button fx:id="SearchButton" layoutX="28.0" layoutY="366.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="26.0" prefWidth="124.0" text="Search" />
+                        <Button fx:id="SearchButton" layoutX="28.0" layoutY="366.0" mnemonicParsing="false" onAction="#handleButtonAction" prefHeight="26.0" prefWidth="124.0" style="-fx-background-color: #011936;" text="Search" textFill="#fafafa" />
                         <MenuButton fx:id="TypeMenu" layoutX="222.0" layoutY="210.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="22.0" />
                         <TextField fx:id="TypeText" layoutX="106.0" layoutY="211.0" prefHeight="26.0" prefWidth="116.0" promptText="Customer" />
                         <TextField fx:id="CompText" layoutX="103.0" layoutY="254.0" />
@@ -51,9 +51,36 @@
                         <TextField fx:id="ClassTypeText" layoutX="101.0" layoutY="255.0" />
                         <TextField fx:id="UnitText" layoutX="101.0" layoutY="306.0" />
                         <Label fx:id="UnitLabel" layoutX="11.0" layoutY="310.0" text="Unit" />
-                        <Button fx:id="PSearchButton" layoutX="72.0" layoutY="375.0" mnemonicParsing="false" onAction="#handleProductSearch" prefHeight="35.0" prefWidth="135.0" text="Search" />
+                        <Button fx:id="PSearchButton" layoutX="72.0" layoutY="375.0" mnemonicParsing="false" onAction="#handleProductSearch" prefHeight="35.0" prefWidth="135.0" style="-fx-background-color: #011936;" text="Search" textFill="WHITE" />
                      </children></AnchorPane>
             </content>
+          </Tab>
+          <Tab text="Product Reports">
+              <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="ProductReports" layoutX="373.0" layoutY="14.0" prefHeight="524.0" prefWidth="699.0" />
+                        <CheckBox fx:id="CheckBox1" layoutX="28.0" layoutY="42.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="309.0" text="Product Sales Report for Classes of Product" />
+                        <CheckBox fx:id="CheckBox2" layoutX="28.0" layoutY="71.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="317.0" text="Sales By each Cashier of Classes of Product" />
+                        <CheckBox fx:id="CheckBox3" layoutX="28.0" layoutY="101.0" mnemonicParsing="false" prefHeight="18.0" prefWidth="288.0" text="Dail, Monthly and Annual Sales" />
+                        <CheckBox fx:id="CheckBox4" layoutX="28.0" layoutY="129.0" mnemonicParsing="false" text="Produt Inventory" />
+                        <Label fx:id="Barcode2Label" layoutX="30.0" layoutY="210.0" text="Barcode" />
+                        <TextField fx:id="PName2Text" layoutX="137.0" layoutY="243.0" />
+                        <TextField fx:id="Barcode2Text" layoutX="137.0" layoutY="206.0" />
+                        <Label fx:id="ClassLabel" layoutX="19.0" layoutY="290.0" text="Product Class" />
+                        <TextField fx:id="ClassText" layoutX="137.0" layoutY="286.0" />
+                        <CheckBox fx:id="CheckBox5" layoutX="28.0" layoutY="158.0" mnemonicParsing="false" text="Product Cost Changes" />
+                        <Label fx:id="PName2Label" layoutX="27.0" layoutY="247.0" text="Product Name" />
+                        <TextField fx:id="Brand2Text" layoutX="133.0" layoutY="330.0" />
+                        <TextField fx:id="SDateText" layoutX="133.0" layoutY="374.0" promptText="Format : YYYY-MM-DD" />
+                        <TextField fx:id="EDateText" layoutX="133.0" layoutY="419.0" promptText="Format : YYYY-MM-DD" />
+                        <Label fx:id="Brand2Label" layoutX="36.0" layoutY="334.0" text="Brand" />
+                        <Label fx:id="SDateLabel" layoutX="25.0" layoutY="378.0" text="Start Date" />
+                        <Label fx:id="EDateLabel" layoutX="31.0" layoutY="423.0" text="End Date" />
+                        <Button fx:id="ReportButton" layoutX="57.0" layoutY="471.0" mnemonicParsing="false" onAction="#ReportHandler" prefHeight="42.0" prefWidth="198.0" style="-fx-background-color: #011936;" text="Report" textFill="WHITE" />
+                     </children></AnchorPane>
+          </content>
+
           </Tab>
         </tabs>
       </TabPane>

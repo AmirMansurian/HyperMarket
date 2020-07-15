@@ -31,6 +31,41 @@ public class Product {
         this.TypeName = new SimpleStringProperty(typename);
     }
 
+    public Product(String id, String name, String barcode, String brand, String unit, String fee, String inventory)
+    {
+        this.ID = new SimpleStringProperty(id);
+        this.Name = new SimpleStringProperty(name);
+        this.Barcode = new SimpleStringProperty(barcode);
+        this.Brand = new SimpleStringProperty(brand);
+        this.Unit = new SimpleStringProperty(unit);
+        this.Fee = new SimpleStringProperty(fee);
+        this.Inventory = new SimpleStringProperty(inventory);
+    }
+
+    public Product(String barcode, String name, String brand, String fee, String date)
+    {
+        this.ID = new SimpleStringProperty(barcode);
+        this.Name = new SimpleStringProperty(name);
+        this.Barcode = new SimpleStringProperty(brand);
+        this.Brand = new SimpleStringProperty(fee);
+        this.Unit = new SimpleStringProperty(date);
+    }
+
+    public Product (String year, String month, String day, String total)
+    {
+        this.ID = new SimpleStringProperty(year);
+        this.Name = new SimpleStringProperty(month);
+        this.Barcode = new SimpleStringProperty(day);
+        this.Brand = new SimpleStringProperty(total);
+    }
+
+    public Product(String typename, String name, String fee)
+    {
+        this.TypeName = new SimpleStringProperty(typename);
+        this.Name = new SimpleStringProperty(name);
+        this.Fee = new SimpleStringProperty(fee);
+    }
+
     public String getID(){
         return ID.get();
     }

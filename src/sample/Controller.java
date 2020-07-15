@@ -34,27 +34,6 @@ public class Controller {
     private TextField STText;
 
     @FXML
-    private Label IDLabel;
-
-    @FXML
-    private Label FNameLabel;
-
-    @FXML
-    private Label LNameLabel;
-
-    @FXML
-    private Label NumberLabel;
-
-    @FXML
-    private Label TypeLabel;
-
-    @FXML
-    private Label STLabel;
-
-    @FXML
-    private Label CompLabel;
-
-    @FXML
     private Button SearchButton;
 
     @FXML
@@ -87,32 +66,45 @@ public class Controller {
     @FXML
     private TextField UnitText;
 
-    @FXML
-    private Label PIDLabel;
-
-    @FXML
-    private Label PNameLabel;
-
-    @FXML
-    private Label BarcoedLabel;
-
-    @FXML
-    private Label BrandLabel;
-
-    @FXML
-    private Label SupplierLabel;
-
-    @FXML
-    private Label ClassTypeLabel;
-
-    @FXML
-    private Label UnitLabel;
-
-    @FXML
-    private Button PSearchButton;
 
     @FXML
     private TableView <Product> ProductTable;
+
+    @FXML
+    private CheckBox CheckBox1;
+
+    @FXML
+    private CheckBox CheckBox2;
+
+    @FXML
+    private CheckBox CheckBox3;
+
+    @FXML
+    private CheckBox CheckBox4;
+
+    @FXML
+    private CheckBox CheckBox5;
+
+    @FXML
+    private TextField Barcode2Text;
+
+    @FXML
+    private TextField PName2Text;
+
+    @FXML
+    private TextField ClassText;
+
+    @FXML
+    private TextField Brand2Text;
+
+    @FXML
+    private TextField SDateText;
+
+    @FXML
+    private TextField EDateText;
+
+    @FXML
+    private TableView <Product> ProductReports;
 
 
     Connection connection = null;
@@ -129,6 +121,13 @@ public class Controller {
     {
         CompText.setDisable(true);
         STText.setDisable(true);
+        Barcode2Text.setDisable(true);
+        PName2Text.setDisable(true);
+        Brand2Text.setDisable(true);
+        ClassText.setDisable(true);
+        SDateText.setDisable(true);
+        EDateText.setDisable(true);
+        CheckBox1.setSelected(true);
 
         MenuItem item1 = new MenuItem("Staff");
         item1.setOnAction(event -> {TypeText.setText("Staff");
@@ -145,8 +144,377 @@ public class Controller {
             STText.setDisable(true);
         });
         TypeMenu.getItems().addAll(item1, item2, item3);
+
+        CheckBox4.setOnAction(event -> {
+            if (CheckBox4.isSelected()) {
+                Barcode2Text.setDisable(false);
+                PName2Text.setDisable(false);
+                Brand2Text.setDisable(false);
+                ClassText.setDisable(false);
+                SDateText.setDisable(true);
+                EDateText.setDisable(true);
+
+                CheckBox1.setSelected(false);
+                CheckBox2.setSelected(false);
+                CheckBox3.setSelected(false);
+                CheckBox5.setSelected(false);
+            }
+            else{
+                CheckBox4.setSelected(true);
+            }
+        });
+
+        CheckBox5.setOnAction(event -> {
+            if (CheckBox5.isSelected()) {
+                Barcode2Text.setDisable(false);
+                PName2Text.setDisable(false);
+                Brand2Text.setDisable(false);
+                ClassText.setDisable(false);
+                SDateText.setDisable(false);
+                EDateText.setDisable(false);
+                CheckBox1.setSelected(false);
+                CheckBox2.setSelected(false);
+                CheckBox3.setSelected(false);
+                CheckBox4.setSelected(false);
+            }
+            else
+                CheckBox5.setSelected(true);
+        });
+
+        CheckBox1.setOnAction(event -> {
+            if (!CheckBox1.isSelected())
+                CheckBox1.setSelected(true);
+            Barcode2Text.setDisable(true);
+            PName2Text.setDisable(true);
+            Brand2Text.setDisable(true);
+            ClassText.setDisable(true);
+            SDateText.setDisable(true);
+            EDateText.setDisable(true);
+            CheckBox4.setSelected(false);
+            CheckBox2.setSelected(false);
+            CheckBox3.setSelected(false);
+            CheckBox5.setSelected(false);
+        });
+
+        CheckBox2.setOnAction(event -> {
+            if (!CheckBox2.isSelected())
+                CheckBox2.setSelected(true);
+            Barcode2Text.setDisable(true);
+            PName2Text.setDisable(true);
+            Brand2Text.setDisable(true);
+            ClassText.setDisable(true);
+            SDateText.setDisable(true);
+            EDateText.setDisable(true);
+            CheckBox1.setSelected(false);
+            CheckBox4.setSelected(false);
+            CheckBox3.setSelected(false);
+            CheckBox5.setSelected(false);
+        });
+
+        CheckBox3.setOnAction(event -> {
+            if (!CheckBox3.isSelected())
+                CheckBox3.setSelected(true);
+            Barcode2Text.setDisable(true);
+            PName2Text.setDisable(true);
+            Brand2Text.setDisable(true);
+            ClassText.setDisable(true);
+            SDateText.setDisable(true);
+            EDateText.setDisable(true);
+            CheckBox1.setSelected(false);
+            CheckBox2.setSelected(false);
+            CheckBox4.setSelected(false);
+            CheckBox5.setSelected(false);
+        });
+
+
+
     }
 
+    @FXML
+    private void ReportHandler (ActionEvent event) throws  SQLException
+    {
+        if (CheckBox1.isSelected())
+        {
+            String query = "select * from Transactions.SubSales";
+            statement = connection.prepareStatement(query);
+            resultSet=statement.executeQuery();
+
+            if (resultSet.next() != false) {
+                resultSet = statement.executeQuery();
+                ObservableList<Product> data = FXCollections.observableArrayList();
+                while (resultSet.next()) {
+                    List<String> list = new ArrayList<String>();
+                    list.add(resultSet.getString("Category"));
+                    list.add(resultSet.getString("Sub Class"));
+                    list.add(resultSet.getString("SaleTotal"));
+
+                    data.add(new Product(list.get(0), list.get(1), list.get(2)));
+                }
+
+                TableColumn Fee = new TableColumn("Fee");
+                Fee.setCellValueFactory(new PropertyValueFactory<>("Fee"));
+
+                TableColumn FName = new TableColumn("Product Name");
+                FName.setCellValueFactory(new PropertyValueFactory<>("Name"));
+
+                TableColumn TypeName = new TableColumn("TypeName");
+                TypeName.setCellValueFactory(new PropertyValueFactory<>("TypeName"));
+
+                ProductReports.setItems(data);
+                ProductReports.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+                ProductReports.getColumns().setAll(TypeName, FName, Fee);
+            }
+            else{
+                ProductReports.getItems().setAll();
+                ProductReports.getColumns().setAll();
+            }
+        }
+
+        else if (CheckBox2.isSelected())
+        {
+            String query = "select * from Transactions.CashiersSubSale";
+            statement = connection.prepareStatement(query);
+            resultSet=statement.executeQuery();
+
+            if (resultSet.next() != false) {
+                resultSet = statement.executeQuery();
+                ObservableList<Product> data = FXCollections.observableArrayList();
+                while (resultSet.next()) {
+                    List<String> list = new ArrayList<String>();
+                    list.add(resultSet.getString("Cashier ID"));
+                    list.add(resultSet.getString("Foodstaff"));
+                    list.add(resultSet.getString("Sanitary"));
+                    list.add(resultSet.getString("Stationery"));
+                    list.add(resultSet.getString("Cosmetic"));
+                    list.add(resultSet.getString("Home Appliances"));
+                    list.add(resultSet.getString("Clothing"));
+
+                    data.add(new Product(list.get(0), list.get(1), list.get(2), list.get(3), list.get(4), list.get(5), list.get(6)));
+                }
+
+                TableColumn ProductId = new TableColumn("Cashier ID");
+                ProductId.setCellValueFactory(new PropertyValueFactory<>("ID"));
+
+                TableColumn FName = new TableColumn("Foodstaff");
+                FName.setCellValueFactory(new PropertyValueFactory<>("Name"));
+
+                TableColumn Barcode = new TableColumn("Sanitary");
+                Barcode.setCellValueFactory(new PropertyValueFactory<>("Barcode"));
+
+                TableColumn Brand = new TableColumn("Stationery");
+                Brand.setCellValueFactory(new PropertyValueFactory<>("Brand"));
+
+                TableColumn Unit = new TableColumn("Cosmetic");
+                Unit.setCellValueFactory(new PropertyValueFactory<>("Unit"));
+
+                TableColumn Fee = new TableColumn("Home Appliances");
+                Fee.setCellValueFactory(new PropertyValueFactory<>("Fee"));
+
+                TableColumn Inventory = new TableColumn("Inventory");
+                Inventory.setCellValueFactory(new PropertyValueFactory<>("Clothing"));
+
+                ProductReports.setItems(data);
+                ProductReports.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+                ProductReports.getColumns().setAll(ProductId, FName, Barcode, Brand, Unit, Fee, Inventory);
+            }
+            else{
+                ProductReports.getItems().setAll();
+                ProductReports.getColumns().setAll();
+            }
+        }
+
+        else if (CheckBox3.isSelected())
+        {
+            String query = "select * from Transactions.SaleHistory";
+            statement = connection.prepareStatement(query);
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next() != false) {
+                resultSet = statement.executeQuery();
+                ObservableList<Product> data = FXCollections.observableArrayList();
+                while (resultSet.next()) {
+                    List<String> list = new ArrayList<String>();
+                    list.add(resultSet.getString("Year"));
+                    list.add(resultSet.getString("Month"));
+                    list.add(resultSet.getString("Day"));
+                    list.add(resultSet.getString("Sale Total"));
+
+                    data.add(new Product(list.get(0), list.get(1), list.get(2), list.get(3)));
+                }
+
+                TableColumn ProductId = new TableColumn("Year");
+                ProductId.setCellValueFactory(new PropertyValueFactory<>("ID"));
+
+                TableColumn FName = new TableColumn("Month");
+                FName.setCellValueFactory(new PropertyValueFactory<>("Name"));
+
+                TableColumn Barcode = new TableColumn("Day");
+                Barcode.setCellValueFactory(new PropertyValueFactory<>("Barcode"));
+
+                TableColumn Brand = new TableColumn("Total Sale");
+                Brand.setCellValueFactory(new PropertyValueFactory<>("Brand"));
+
+                ProductReports.setItems(data);
+                ProductReports.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+                ProductReports.getColumns().setAll(ProductId, FName, Barcode, Brand);
+            }
+            else{
+                ProductReports.getItems().setAll();
+                ProductReports.getColumns().setAll();
+            }
+        }
+
+        else if (CheckBox4.isSelected())
+        {
+            List <String> Args = new ArrayList<String>();
+            Args.add(Barcode2Text.getText());
+            Args.add(PName2Text.getText());
+            Args.add(ClassText.getText());
+            Args.add(Brand2Text.getText());
+            String query = "select * from Production.Product as P, Production.Inventory as I, Production.ProductDetail as D, Production.ProductionType as C where I.ProductId = P.ProductId and D.ProductId = P.ProductId and C.ProductiontypeId = P.SubClassId ";
+
+            for (int i = 0; i < Args.size(); i++) {
+                if (!Args.get(i).isEmpty()) {
+                    if (i == 0) {
+                        query += " and Barcode = ? ";
+                    } else if (i == 1) {
+                        query += " and ProductName = ? ";
+                    } else if (i == 2) {
+                        query += " and TypeName = ? ";
+                    } else if (i == 3) {
+                        query += " and Brand = ? ";
+                    }
+                }
+            }
+
+            statement = connection.prepareStatement(query);
+
+            int j = 0;
+            for (int i = 0; i < Args.size(); i++) {
+                if (!Args.get(i).isEmpty())
+                    statement.setString(++j, Args.get(i));
+            }
+            System.out.println(query);
+
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next() != false) {
+                resultSet = statement.executeQuery();
+                ObservableList<Product> data = FXCollections.observableArrayList();
+                while (resultSet.next()) {
+                    List<String> list = new ArrayList<String>();
+                    list.add(resultSet.getString("Barcode"));
+                    list.add(resultSet.getString("ProductName"));
+                    list.add(resultSet.getString("Brand"));
+                    list.add(resultSet.getString("Inventory"));
+
+                    data.add(new Product(list.get(0), list.get(1), list.get(2), list.get(3)));
+                }
+
+                TableColumn ProductId = new TableColumn("Barcode");
+                ProductId.setCellValueFactory(new PropertyValueFactory<>("ID"));
+
+                TableColumn FName = new TableColumn("ProductName");
+                FName.setCellValueFactory(new PropertyValueFactory<>("Name"));
+
+                TableColumn Barcode = new TableColumn("Brand");
+                Barcode.setCellValueFactory(new PropertyValueFactory<>("Barcode"));
+
+                TableColumn Brand = new TableColumn("Inventory");
+                Brand.setCellValueFactory(new PropertyValueFactory<>("Brand"));
+
+
+                ProductReports.setItems(data);
+                ProductReports.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+                ProductReports.getColumns().setAll(ProductId, FName, Barcode, Brand);
+            }
+            else{
+                ProductReports.getItems().setAll();
+                ProductReports.getColumns().setAll();
+            }
+        }
+
+        else if (CheckBox5.isSelected())
+        {
+            List <String> Args = new ArrayList<String>();
+            Args.add(Barcode2Text.getText());
+            Args.add(PName2Text.getText());
+            Args.add(Brand2Text.getText());
+            Args.add(SDateText.getText());
+            Args.add(EDateText.getText());
+            Args.add(ClassText.getText());
+            String query = "select P.Barcode, P.ProductName, P.Brand, C.ProductFee, C.ModifiedDate from Production.CostChanges as C, Production.Product as P, Production.ProductDetail as D, Production.ProductionType as A where D.ProductId = P.ProductId and C.ProductId = P.ProductId and A.ProductiontypeId = P.SubClassId";
+
+            for (int i = 0; i < Args.size(); i++) {
+                if (!Args.get(i).isEmpty()) {
+                    if (i == 0) {
+                        query += " and Barcode = ? ";
+                    } else if (i == 1) {
+                        query += " and ProductName = ? ";
+                    } else if (i == 2) {
+                        query += " and Brand = ? ";
+                    } else if (i == 3) {
+                        query += " and C.ModifiedDate >= ? ";
+                    } else if (i == 4) {
+                        query += " and C.ModifiedDate <= ? ";
+                    } else if (i == 5)
+                        query += " and TypeName = ?";
+                }
+            }
+
+            statement = connection.prepareStatement(query);
+
+            int j = 0;
+            for (int i = 0; i < Args.size(); i++) {
+                if (!Args.get(i).isEmpty())
+                    statement.setString(++j, Args.get(i));
+            }
+            System.out.println(query);
+
+            resultSet = statement.executeQuery();
+
+            if (resultSet.next() != false) {
+                resultSet = statement.executeQuery();
+                ObservableList<Product> data = FXCollections.observableArrayList();
+                while (resultSet.next()) {
+                    List<String> list = new ArrayList<String>();
+                    list.add(resultSet.getString("Barcode"));
+                    list.add(resultSet.getString("ProductName"));
+                    list.add(resultSet.getString("Brand"));
+                    list.add(resultSet.getString("ModifiedDate"));
+                    list.add(resultSet.getString("ProductFee"));
+
+                    data.add(new Product(list.get(0), list.get(1), list.get(2), list.get(4), list.get(3)));
+                }
+
+                TableColumn ProductId = new TableColumn("Barcode");
+                ProductId.setCellValueFactory(new PropertyValueFactory<>("ID"));
+
+                TableColumn FName = new TableColumn("ProductName");
+                FName.setCellValueFactory(new PropertyValueFactory<>("Name"));
+
+                TableColumn Barcode = new TableColumn("Brand");
+                Barcode.setCellValueFactory(new PropertyValueFactory<>("Barcode"));
+
+                TableColumn Brand = new TableColumn("Product Fee");
+                Brand.setCellValueFactory(new PropertyValueFactory<>("Brand"));
+
+                TableColumn Unit = new TableColumn("Modified Date");
+                Unit.setCellValueFactory(new PropertyValueFactory<>("Unit"));
+
+
+                ProductReports.setItems(data);
+                ProductReports.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+                ProductReports.getColumns().setAll(ProductId, FName, Barcode, Unit, Brand);
+            }
+            else{
+                ProductReports.getItems().setAll();
+                ProductReports.getColumns().setAll();
+            }
+        }
+
+
+    }
 
     @FXML
     private void handleProductSearch(ActionEvent event) throws SQLException {
