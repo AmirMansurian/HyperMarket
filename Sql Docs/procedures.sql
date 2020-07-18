@@ -1,70 +1,63 @@
+CREATE PROCEDURE Person.StaffBirthDayReminder 
+as
+begin 
+	update Person.Staff
+	set Descriptoin = 'Happy Birth Day to you Dear' + FirstName + 'Hyper Market'
+	where MONTH(BithDay) = MONTH(GETDATE()) and DAY(BithDay) = DAY(GETDATE())
+end;
 
-/* trigger for update inventory after sale */
 
-create trigger Transactions.InventorySaleUpdate
-on Transactions.SaleDetail
-after insert 
+/*_____________________________________________________________________________________________________________ */
+
+
+CREATE PROCEDURE Person.CustomerRelationRank 
 as
 begin
 
-	update Production.Inventory
-	set Inventory = Inventory - (select i.ProductQty from inserted as i	where ProductId = i.ProductId), ModifiedDate = GETDATE()
-	where ProductId in (select i.ProductId	from inserted as i)
+	with RelationChain (Inviter, Invited) as (
 
-end
+		select * from Person.Relation
 
-/*___________________________________________________________________________________________________________________ */
+		union all
 
+		select C.Inviter, R.InvitedId 
+		from RelationChain as C, Person.Relation as R
+		where C.Invited = R.InviterId
+	)
 
-/* trigger for update inventory and cost of each product after buy */
-
-create trigger Transactions.InventoryBuyUpdate
-on Transactions.BuyDetail
-after insert 
-as
-begin
-
-	update Production.Inventory
-	set Inventory = Inventory + (select i.ProductQty from inserted as i	where ProductId = i.ProductId), ModifiedDate = GETDATE()
-	where ProductId in (select i.ProductId	from inserted as i)
-
-	Update Production.Product
-	set ProductFee = (select i.UnitPrice from inserted as i where ProductId = i.ProductId)
-	where ProductId in (select i.ProductId	from inserted as i)
-
-	
-	update Production.ProductDetail
-	set BuyFee = (select i.BuyPrice from inserted as i where ProductId = i.ProductId), 
-		Discount = (select i.Discount from inserted as i where ProductId = i.ProductId)
-	where ProductId in (select i.ProductId	from inserted as i)
-
-	insert into Production.CostChanges
-	select I.ProductId, I.UnitPrice, GETDATE(), NULL
-	from inserted as I inner join Production.CostChanges as C on (I.ProductId = C.ProductId)
-	where I.UnitPrice <> C.ProductFee
+	UPDATE Person.Customer
+	set RelationChain = 
+	case 
+		when (select count(*) from RelationChain as R where R.Inviter = CustomerId) < 50 then 'Bronze Customer'
+		when (select count(*) from RelationChain as R where R.Inviter = CustomerId) >= 50 and (select count(*) from RelationChain as R where R.Inviter = CustomerId) <100 then 'Silver Customer'
+		else 'Golden Customer'
+	end
 
 end
 
 
-/*___________________________________________________________________________________________________________________ */
+/* ___________________________________________________________________________________________________ */
 
-/* insert records for new products in inventory and cost change table */
 
-create trigger Production.CreateProduct
-on Production.product
-after insert
+CREATE PROCEDURE Person.CustomerDebt
 as
 begin
 
-	insert	into Production.Inventory
-	select I.ProductId, 0, GETDATE(), NULL
-	from inserted as I
-
-	insert into Production.CostChanges
-	select I.ProductId, I.ProductFee, GETDATE(), NULL
-	from inserted as I
+	update Person.Customer
+	set Descriptoin = 'Your Debt is more than 100 $ Please check your Bills'
+	where Debt > 100
 
 end
 
+/* ___________________________________________________________________________________________________ */
 
-/*___________________________________________________________________________________________________________________ */
+
+CREATE PROCEDURE Production.ExpiredProductWarning
+as
+begin
+
+	UPDATE Production.ProductDetail
+	set Description = 'Product is going to be expired in 10 days'
+	where YEAR(ExpirationDate) =  YEAR(GETDATE()) and MONTH(ExpirationDate) =  MONTH(GETDATE()) and DAY(ExpirationDate) -  YEAR(GETDATE()) < 10
+
+end
